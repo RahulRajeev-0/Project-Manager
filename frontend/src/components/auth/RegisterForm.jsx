@@ -1,66 +1,39 @@
 import React from 'react'
 import './RegisterForm.css'
 
+import {useNavigate} from 'react-router-dom'
+
 const RegisterForm = () => {
+  const navigate = useNavigate()
+
   return (
-    <div className="center-container">
-    <div className="card">
-      <div className="card2">
-        <form className="form">
-          <p id="heading">Sign Up</p>
-
-          {/* user name  */}
-          <div className="field">
+    <section className="container">
+      <div className="login-container">
+        <div className="circle circle-one"></div>
+        <div className="form-container">
+          <img
+            src="https://raw.githubusercontent.com/hicodersofficial/glassmorphism-login-form/master/assets/illustration.png"
+            alt="illustration"
+            className="illustration"
+          />
+          <h1 className="opacity">REGISTER</h1>
+          <form>
+            <input type="text" placeholder="USERNAME" required />
+            <input type="email" placeholder="EMAIL" required/>
+            <input type="password" placeholder="PASSWORD" required/>
+            <input type="password" placeholder="CONFIRM PASSWORD" required/>
+            <button className="opacity">SUBMIT</button>
+          </form>
+          <div className="register-forget opacity">
+            <a onClick={()=>navigate('/')}  style={{cursor:'pointer'}}>REGISTER</a>
            
-            <input
-              type="text"
-              className="input-field"
-              placeholder="Username"
-              autoComplete="off"
-            />
           </div>
-
-          {/* email */}
-          <div className="field">
-           
-            <input
-              type="email"
-              className="input-field"
-              placeholder="Email"
-              autoComplete="off"
-            />
-          </div>
-
-          {/* phone number  */}
-          <div className="field">
-           
-            <input
-              type="number"
-              className="input-field"
-              placeholder="Phone number"
-              autoComplete="off"
-            />
-          </div>
-          <div className="field">
-           
-            <input
-              type="password"
-              className="input-field"
-              placeholder="Password"
-            />
-          </div>
-          <div className="btn">
-            {/* <button className="button1">
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Login&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            </button> */}
-            <button className="button2">Sign Up</button>
-          </div>
-          <button onClick={()=>navigate('/')} className="button3">Login</button>
-        </form>
+        </div>
+        <div className="circle circle-two"></div>
       </div>
-    </div>
-    </div>
-  )
+      <div className="theme-btn-container"></div>
+    </section>
+  );
 }
 
 export default RegisterForm
