@@ -6,6 +6,10 @@ import LoginPage from './pages/auth/LoginPage';
 import RegisterPage from './pages/auth/RegisterPage';
 import HomePage from './pages/home/HomePage';
 
+// alert
+import { ToastContainer} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 function App() {
   
 
@@ -18,6 +22,19 @@ function App() {
           <Route path='/register' element={<RegisterPage/>} />
         </Routes>
       </BrowserRouter>
+      <ToastContainer
+  position="top-center"
+  autoClose={10000}
+  hideProgressBar={false}
+  newestOnTop
+  closeOnClick
+  rtl={false}
+  pauseOnFocusLoss
+  draggable
+  pauseOnHover
+  theme="dark"
+  transition: Bounce
+  />
     </>
   )
 }

@@ -36,6 +36,7 @@ class RegisterView(APIView):
     '''User sign up view creates new user '''
     def post(self, request):
         try:
+       
             serializer = RegisterSerializer(data=request.data)
             if serializer.is_valid():
                 serializer.save()
@@ -60,7 +61,7 @@ class RegisterView(APIView):
                 return Response({'message': e},
                                 status=status.HTTP_400_BAD_REQUEST)
             print(e)
-            return Response({'message': 'Something went wrong'},
+            return Response({'message': ['Something went wrong']},
                              status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -77,14 +78,14 @@ class LoginView(APIView):
             password = request.data.get('password')
 
             if email is None or password is None:
-                return Response({'message':"Please provide both email and password"},
+                return Response({'message':["Please provide both email and password"]},
                                 status=status.HTTP_400_BAD_REQUEST)
             user = authenticate(request, email=email, password=password)
 
             if user is not None:
                 # check the user is blocked or not
                 if not user.is_active:  
-                    return Response({"message":"You account is blocked"}, 
+                    return Response({"message":["You account is blocked"]}, 
                                     status=status.HTTP_403_FORBIDDEN)
                 
                 refresh = RefreshToken.for_user(user) # generating new refresh token for the user
@@ -97,39 +98,14 @@ class LoginView(APIView):
 
                 return Response(content,status=status.HTTP_200_OK)
             else:
-                return Response({'message':"Invalid credentials"},
+                return Response({'message':["Invalid credentials"]},
                                  status=status.HTTP_400_BAD_REQUEST)
         
         except Exception as e:
             print(e)
-            return Response({'message': "An error occurred. Please try again later."}, 
+            return Response({'message': ["An error occurred. Please try again later."]}, 
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 
 
-# class UserSearchView(APIView):
-#     permission_classes = [IsAuthenticated]
-
-#     def get(self, request, *args, **kwargs):
-#         query = request.GET.get('q', "")
-#         page_number = request.query_params.get('page', 1)
-#         if query:
-#             users = User.objects.filter(
-#                 Q(username__icontains=query) | Q(email__iexact=query)
-#             )
-
-#             paginator = Paginator(users, 10)  # 10 items per page
-#             try:
-#                 users_paginated = paginator.page(page_number)
-#             except PageNotAnInteger:
-#                 users_paginated = paginator.page(1)
-#             except EmptyPage:
-#                 users_paginated = paginator.page(paginator.num_pages)
-
-#             serializer = UserSerializer(users_paginated, many=True)
-#             return Response(serializer.data,
-#                              status=status.HTTP_200_OK)
-
-#         return Response({'error': 'Query parameter is missing'},
-#                          status=status.HTTP_400_BAD_REQUEST)

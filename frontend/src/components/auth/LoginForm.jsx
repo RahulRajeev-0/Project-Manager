@@ -1,11 +1,57 @@
-import React from 'react';
-import './LoginForm.css'
+import React, { useState } from 'react';
+import './LoginForm.css';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios'; // Import axios or any other HTTP client you prefer
 
-import {useNavigate} from 'react-router-dom'
+// Import toast for notifications
+import { toast } from 'react-toastify';
 
+const LoginForm = () => {
+  const navigate = useNavigate();
+  const BaseURL = 'http://localhost:8000/';
 
-const SignInForm = () => {
-  const navigate = useNavigate()
+  // State to manage form field values
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
+  });
+
+  // State to manage form errors
+  const [error, setError] = useState('');
+
+  // Handle input changes
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value
+    });
+  };
+
+  // Handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      // Replace with your API endpoint
+      const response = await axios.post(BaseURL+'account/login/', formData);
+
+      // Handle successful login (e.g., redirect to dashboard)
+      if (response.status === 200) {
+        navigate('/dashboard');
+      }
+    } catch (error) {
+      console.log(error);
+      if (error && error.response.data) {
+        error.response.data.message.forEach(error => {
+          toast(error);
+        });
+      } else {
+        // Handle login errors
+        setError('Login failed. Please try again.');
+      }
+    }
+  };
 
   return (
     <section className="container">
@@ -18,14 +64,28 @@ const SignInForm = () => {
             className="illustration"
           />
           <h1 className="opacity">LOGIN</h1>
-          <form>
-            <input type="text" placeholder="USERNAME" />
-            <input type="password" placeholder="PASSWORD" />
-            <button className="opacity">SUBMIT</button>
+          <form onSubmit={handleSubmit}>
+            <input
+              type="email"
+              name="email"
+              placeholder="USERNAME"
+              value={formData.username}
+              onChange={handleChange}
+              required
+            />
+            <input
+              type="password"
+              name="password"
+              placeholder="PASSWORD"
+              value={formData.password}
+              onChange={handleChange}
+              required
+            />
+            <button type="submit" className="opacity">SUBMIT</button>
           </form>
+          {error && <p style={{color:'red'}} className="error-message">{error}</p>}
           <div className="register-forget opacity">
-            <a onClick={()=>navigate('/register')} style={{cursor:'pointer'}}>LOGIN</a>
-            
+            <a onClick={() => navigate('/register')} style={{ cursor: 'pointer' }}>REGISTER</a>
           </div>
         </div>
         <div className="circle circle-two"></div>
@@ -35,4 +95,4 @@ const SignInForm = () => {
   );
 };
 
-export default SignInForm;
+export default LoginForm;

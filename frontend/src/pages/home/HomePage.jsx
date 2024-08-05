@@ -7,7 +7,7 @@ const HomePage = () => {
   return (
     <div>
       <Navbar/>
-      <div style={{ marginTop: '20px' }}>
+      <div style={{ marginTop: '30px' }}>
 
       <DataTable/>
       </div>
