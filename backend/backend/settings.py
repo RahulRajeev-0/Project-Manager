@@ -49,6 +49,7 @@ INSTALLED_APPS = [
 
      # new app 
     'account',
+    'project',
 ]
 
 MIDDLEWARE = [

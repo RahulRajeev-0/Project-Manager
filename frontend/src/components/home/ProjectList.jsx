@@ -1,12 +1,14 @@
 import * as React from 'react';
+import { useEffect, useState } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import { Button } from '@mui/material';
+import axios from 'axios'
 
 // Define your columns
 const columns = [
   { field: 'id', headerName: 'ID', width: 70 },
-  { field: 'projectName', headerName: 'Project Name', width: 300 },
-  { field: 'createDate', headerName: 'Create Date', type: 'Date', width: 200 },
+  { field: 'name', headerName: 'Project Name', width: 300 },
+  { field: 'created_at', headerName: 'Create Date', type: 'Date', width: 200 },
   {
     field: 'editName',
     headerName: 'Edit Name',
@@ -40,16 +42,43 @@ const columns = [
   },
 ];
 
-// Example rows data
-const rows = [
-  { id: 1, projectName: 'Project A', createDate: '2024-01-01' },
-  { id: 2, projectName: 'Project B', createDate: '2024-01-02' },
-  { id: 3, projectName: 'Project C', createDate: '2024-01-03' },
-  { id: 4, projectName: 'Project D', createDate: '2024-01-04' },
-  { id: 5, projectName: 'Project E', createDate: '2024-01-05' },
-];
+
 
 export default function DataTable() {
+
+  const [rows, setRows] = useState([])
+  const BaseURL = 'http://localhost:8000/';
+
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+    const year = date.getFullYear();
+    return `${day} - ${month} - ${year}`;
+  };
+
+  // fatch project function that fatches all projects 
+  const fatchProjects = async ()=>{
+    const token = localStorage.getItem('access')
+    const response = await axios.get(BaseURL + 'project/', {
+      headers: {
+        'Authorization': `Bearer ${token}` // Include the token in the headers
+      }
+    });
+    const formattedData = response.data.map(project => ({
+      ...project,
+      created_at: formatDate(project.created_at),
+      updated_at: formatDate(project.updated_at),
+    }));
+    setRows(formattedData);
+  }
+  useEffect(()=>{
+    fatchProjects()
+  },[])
+
+
+
   return (
     <div style={{ height: 400, width: '100%' }}>
       <DataGrid

@@ -2,10 +2,13 @@ import React, { useEffect, useState } from 'react';
 import isAuthUser from './isAuthUser';
 import { Navigate, Outlet } from 'react-router-dom';
 
+
+// import {UserContextProvider } from './../context/UserContext'
+
 const PrivateRoutes = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true); // Loading state
-
+  
   useEffect(() => {
     const fetchData = async () => {
       const authInfo = await isAuthUser();
