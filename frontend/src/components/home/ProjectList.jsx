@@ -1,13 +1,22 @@
-import * as React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import { Button } from '@mui/material';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import EditProjectModal from './EditProjectModal'; // Import the modal component
 
 const BaseURL = 'http://localhost:8000/';
 
 export default function DataTable({ rows, setRows }) {
+  const [open, setOpen] = useState(false);
+  const [selectedProject, setSelectedProject] = useState(null);
+
+  const handleOpen = (project) => {
+    setSelectedProject(project);
+    setOpen(true);
+  };
+
+  const handleClose = () => setOpen(false);
 
   const deleteProject = async (id) => {
     const token = localStorage.getItem('access');
@@ -30,7 +39,7 @@ export default function DataTable({ rows, setRows }) {
   };
 
   const columns = [
-    { field: 'id', headerName: 'ID', width: 70 },
+    { field: 'index', headerName: 'No', width: 70 },
     { field: 'name', headerName: 'Project Name', width: 300 },
     { field: 'created_at', headerName: 'Create Date', type: 'Date', width: 200 },
     {
@@ -38,7 +47,7 @@ export default function DataTable({ rows, setRows }) {
       headerName: 'Edit Name',
       width: 200,
       renderCell: (params) => (
-        <Button variant="outlined" color="primary">
+        <Button variant="outlined" color="primary" onClick={() => handleOpen(params.row)}>
           Edit
         </Button>
       ),
@@ -78,17 +87,22 @@ export default function DataTable({ rows, setRows }) {
         pageSizeOptions={[5, 10]}
         sx={{
           '& .MuiDataGrid-cell': {
-            color: 'white', // Change text color to white
+            color: 'white',
           },
-          '& .MuiDataGrid-columnHeaderTitle': {
-            // color: 'white', // Change header text color to white
-          },
+          '& .MuiDataGrid-columnHeaderTitle': {},
           '& .MuiPaginationItem-root': {
-            backgroundColor: 'white'
-            // color: 'white', // Change pagination item text color to white
+            backgroundColor: 'white',
           },
         }}
       />
+      {selectedProject && (
+        <EditProjectModal
+          open={open}
+          handleClose={handleClose}
+          project={selectedProject}
+          setRows={setRows}
+        />
+      )}
     </div>
   );
 }

@@ -31,8 +31,9 @@ const HomePage = () => {
       }
     });
 
-    const formattedData = response.data.map(project => ({
+    const formattedData = response.data.map((project, index) => ({
       ...project,
+      index: index + 1, // Adding sequential number
       created_at: formatDate(project.created_at),
       updated_at: formatDate(project.updated_at),
     }));

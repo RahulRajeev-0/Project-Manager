@@ -202,6 +202,8 @@ function Navbar({fatchProjects}) {
         </Container>
       </AppBar>
 
+
+      {/* Modal for creating new project  */}
       <Dialog open={openModal} onClose={handleCloseModal}>
         <DialogTitle>Create Project</DialogTitle>
         <DialogContent>
