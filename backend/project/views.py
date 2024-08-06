@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from .models import Project
 from .serializers import ProjectSerializer
-
+from rest_framework.exceptions import PermissionDenied
 # Create a new project
 
 
@@ -37,12 +37,19 @@ class ProjectListView(generics.ListAPIView):
         return Project.objects.filter(created_by=self.request.user)
     
 
-# Delete all projects
-class ProjectDeleteAllView(generics.DestroyAPIView):
+# Delete project
+class ProjectDeleteView(generics.DestroyAPIView):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
     permission_classes = [IsAuthenticated]
 
     def delete(self, request, *args, **kwargs):
-        self.get_queryset().delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        try:
+            project = self.get_object()
+            # Check if the current user is the creator of the project
+            if project.created_by != request.user:
+                raise PermissionDenied("You do not have permission to delete this project.")
+            project.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except Project.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)

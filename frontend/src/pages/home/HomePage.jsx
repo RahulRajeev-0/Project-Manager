@@ -48,7 +48,7 @@ const HomePage = () => {
       <Navbar fatchProjects={fatchProjects}/>
       <div style={{ marginTop: '30px' }}>
 
-      <DataTable rows={rows}/>
+      <DataTable rows={rows} setRows={setRows}/>
       </div>
     </div>
   )
