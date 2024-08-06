@@ -41,10 +41,10 @@ const RegisterForm = () => {
     }
 
     try {
-      // Replace with your API endpoint
+      
       const response = await axios.post(BaseURL+'account/register/', formData);
       
-      // Handle successful registration (e.g., redirect to login page)
+      // Handle successful registration 
       if (response.status === 201) {
         toast.success('Account created !')
         navigate('/login');

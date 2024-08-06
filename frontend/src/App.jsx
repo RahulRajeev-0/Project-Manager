@@ -10,6 +10,8 @@ import HomePage from './pages/home/HomePage';
 import { ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+// private route
+import PrivateRoute from './utils/PrivateRoutes';
 function App() {
   
 
@@ -17,24 +19,31 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path='/' element={<HomePage/>} />
           <Route path='/login' element={<LoginPage/>} />
           <Route path='/register' element={<RegisterPage/>} />
+
+          {/* private routes */}
+          <Route element={<PrivateRoute/>} >
+
+              <Route path='/' element={<HomePage/>  } />
+
+          </Route>
+         
         </Routes>
       </BrowserRouter>
       <ToastContainer
-  position="top-center"
-  autoClose={10000}
-  hideProgressBar={false}
-  newestOnTop
-  closeOnClick
-  rtl={false}
-  pauseOnFocusLoss
-  draggable
-  pauseOnHover
-  theme="dark"
-  transition: Bounce
-  />
+        position="top-center"
+        autoClose={10000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+        transition: Bounce
+      />
     </>
   )
 }

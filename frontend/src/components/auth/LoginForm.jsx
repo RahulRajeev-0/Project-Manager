@@ -33,12 +33,14 @@ const LoginForm = () => {
     e.preventDefault();
 
     try {
-      // Replace with your API endpoint
+     
       const response = await axios.post(BaseURL+'account/login/', formData);
-
-      // Handle successful login (e.g., redirect to dashboard)
+      console.log(response)
+      // Handle successful login 
       if (response.status === 200) {
-        navigate('/dashboard');
+        localStorage.setItem('access', response.data.access)
+        localStorage.setItem('refresh', response.data.refresh)
+        navigate('/');
       }
     } catch (error) {
       console.log(error);
@@ -68,8 +70,8 @@ const LoginForm = () => {
             <input
               type="email"
               name="email"
-              placeholder="USERNAME"
-              value={formData.username}
+              placeholder="EMAIL"
+              value={formData.email}
               onChange={handleChange}
               required
             />

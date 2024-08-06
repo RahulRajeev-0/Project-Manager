@@ -74,6 +74,7 @@ class LoginView(APIView):
 
     def post(self, request):
         try:
+            print("****")
             email = request.data.get('email')
             password = request.data.get('password')
 
