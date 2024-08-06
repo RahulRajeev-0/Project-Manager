@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {useState, useEffect} from 'react';
+import {useNavigate} from 'react-router-dom'
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
@@ -12,6 +13,8 @@ import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Avatar from '@mui/material/Avatar';
+
+import LogoutIcon from '@mui/icons-material/Logout';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
@@ -23,13 +26,14 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 
 
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+
 
 function Navbar({fatchProjects}) {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [openModal, setOpenModal] = React.useState(false);
   const [projectName, setProjectName] = React.useState('');
+  const navigate = useNavigate()
   const BaseURL = 'http://localhost:8000/';
 
   const handleOpenNavMenu = (event) => {
@@ -55,6 +59,14 @@ function Navbar({fatchProjects}) {
     setOpenModal(false);
   };
 
+  // logout function 
+  const logout = ()=> {
+    localStorage.removeItem('access');
+    localStorage.removeItem('refresh');
+    navigate('/login')
+
+  }
+  // create new project 
   const handleSubmit = async (e) => {
     e.preventDefault();
     let formData = new FormData()
@@ -167,36 +179,13 @@ function Navbar({fatchProjects}) {
               >
                 Start Project
               </Button>
+              
             </Box>
 
             <Box sx={{ flexGrow: 0 }}>
-              <Tooltip title="Open settings">
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-                </IconButton>
-              </Tooltip>
-              <Menu
-                sx={{ mt: '45px' }}
-                id="menu-appbar"
-                anchorEl={anchorElUser}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                open={Boolean(anchorElUser)}
-                onClose={handleCloseUserMenu}
-              >
-                {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                    <Typography textAlign="center">{setting}</Typography>
-                  </MenuItem>
-                ))}
-              </Menu>
+            <IconButton aria-label="logout" onClick={logout} size="small" sx={{ color: 'black' }}>
+                  <LogoutIcon fontSize="large" fontColor='white' />
+              </IconButton>
             </Box>
           </Toolbar>
         </Container>
