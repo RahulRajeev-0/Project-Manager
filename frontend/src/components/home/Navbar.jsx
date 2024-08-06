@@ -1,4 +1,8 @@
 import * as React from 'react';
+import {useState, useEffect} from 'react';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -18,14 +22,15 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 
-const pages = ['Products', 'Pricing', 'Blog'];
+
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
-function Navbar() {
+function Navbar({fatchProjects}) {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [openModal, setOpenModal] = React.useState(false);
   const [projectName, setProjectName] = React.useState('');
+  const BaseURL = 'http://localhost:8000/';
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -50,10 +55,27 @@ function Navbar() {
     setOpenModal(false);
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    let formData = new FormData()
+    formData.append('name', projectName)
+    const token = localStorage.getItem('access')
+    
+    const response = await axios.post(BaseURL + 'project/create/', formData, {headers:{
+       'Authorization': `Bearer ${token}`,
+       'Content-Type': 'application/json'
+    }})
+
+    if (response.status == 201){
+      toast.success("Project Created !")
+      fatchProjects()
+      setProjectName("")
+
+    }
+
+    console.log(response);
     console.log('Project Name:', projectName);
-    // Add logic to handle project creation
+    
     handleCloseModal();
   };
 
@@ -195,7 +217,7 @@ function Navbar() {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseModal}>Cancel</Button>
-          <Button onClick={handleSubmit}>Submit</Button>
+          <Button onClick={(e)=>{handleSubmit(e)}}>Submit</Button>
         </DialogActions>
       </Dialog>
     </>

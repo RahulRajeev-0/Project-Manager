@@ -2,7 +2,6 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import { Button } from '@mui/material';
-import axios from 'axios'
 
 // Define your columns
 const columns = [
@@ -44,39 +43,9 @@ const columns = [
 
 
 
-export default function DataTable() {
+export default function DataTable({rows}) {
 
-  const [rows, setRows] = useState([])
-  const BaseURL = 'http://localhost:8000/';
-
-
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
-    const year = date.getFullYear();
-    return `${day} - ${month} - ${year}`;
-  };
-
-  // fatch project function that fatches all projects 
-  const fatchProjects = async ()=>{
-    const token = localStorage.getItem('access')
-    const response = await axios.get(BaseURL + 'project/', {
-      headers: {
-        'Authorization': `Bearer ${token}` // Include the token in the headers
-      }
-    });
-    const formattedData = response.data.map(project => ({
-      ...project,
-      created_at: formatDate(project.created_at),
-      updated_at: formatDate(project.updated_at),
-    }));
-    setRows(formattedData);
-  }
-  useEffect(()=>{
-    fatchProjects()
-  },[])
-
+  
 
 
   return (
