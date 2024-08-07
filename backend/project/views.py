@@ -109,7 +109,8 @@ class TodoStatusUpdateView(generics.UpdateAPIView):
         todo = self.get_object()
         if todo.project.created_by != self.request.user:
             raise PermissionDenied("You do not have permission to change the status of this todo.")
-        serializer.save(status='completed')
+        new_status = 'completed' if todo.status == 'pending' else 'pending'
+        serializer.save(status=new_status)
 
 
 class TodoListView(generics.ListAPIView):
