@@ -1,58 +1,131 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TextField, Button, List, ListItem, ListItemText, IconButton, Typography, Checkbox } from '@mui/material';
 import { Edit, Delete } from '@mui/icons-material';
+import axios from 'axios';
 import './TodoPage.css';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const TodoPage = () => {
+  const navigate = useNavigate();
+  const { project_id } = useParams();
+  const BaseURL = 'http://localhost:8000/';
   const [todos, setTodos] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [editId, setEditId] = useState(null);
   const [editValue, setEditValue] = useState('');
+  const token = localStorage.getItem('access');
 
-  const handleAddTodo = () => {
-    if (inputValue.trim()) {
-      setTodos([...todos, { id: Date.now(), text: inputValue, completed: false }]);
-      setInputValue('');
+  // Fetching todos
+  const fetchTodos = async () => {
+    try {
+      const response = await axios.get(BaseURL + `project/${project_id}/todos/`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      setTodos(response.data);
+    } catch (error) {
+      console.error('Error fetching todos:', error);
     }
   };
 
-  const handleCompleteTodo = (id) => {
-    setTodos(todos.map(todo => 
-      todo.id === id ? { ...todo, completed: !todo.completed } : todo
-    ));
+  useEffect(() => {
+    fetchTodos();
+  }, []);
+
+  const handleAddTodo = async () => {
+    if (inputValue.trim()) {
+      try {
+        const response = await axios.post(
+          `${BaseURL}project/${project_id}/todos/create/`, 
+          { title: inputValue, project: project_id }, // Ensure the key matches your API's expected key
+          {
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            }
+          }
+        );
+        setTodos([...todos, response.data]);
+        setInputValue('');
+      } catch (error) {
+        console.error('Error adding todo:', error);
+      }
+    }
   };
 
-  const handleDeleteTodo = (id) => {
-    setTodos(todos.filter(todo => todo.id !== id));
+  const handleCompleteTodo = async (id) => {
+    try {
+      const response = await axios.patch(BaseURL + `project/todos/${id}/complete/`, {},
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+      setTodos(todos.map(todo =>
+        todo.id === id ? { ...todo, status: response.data.status } : todo
+      ));
+    } catch (error) {
+      console.error('Error completing todo:', error);
+    }
   };
 
-  const handleEditTodo = (id, text) => {
+  const handleDeleteTodo = async (id) => {
+    try {
+      await axios.delete(BaseURL + `project/todos/${id}/delete/`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      setTodos(todos.filter(todo => todo.id !== id));
+    } catch (error) {
+      console.error('Error deleting todo:', error);
+    }
+  };
+
+  const handleEditTodo = (id, title) => {
     setEditId(id);
-    setEditValue(text);
+    setEditValue(title);
   };
 
-  const handleSaveEdit = (id) => {
-    setTodos(todos.map(todo => 
-      todo.id === id ? { ...todo, text: editValue } : todo
-    ));
-    setEditId(null);
-    setEditValue('');
+  const handleSaveEdit = async (id) => {
+    try {
+      const response = await axios.patch(BaseURL + `project/todos/${id}/update/`, { title: editValue },
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+      setTodos(todos.map(todo =>
+        todo.id === id ? { ...todo, title: response.data.title } : todo
+      ));
+      setEditId(null);
+      setEditValue('');
+    } catch (error) {
+      console.error('Error saving todo edit:', error);
+    }
   };
 
   return (
     <div className="todo-container">
       <div className="input-container">
-        <TextField 
-          label="Add a todo" 
-          variant="outlined" 
-          value={inputValue} 
-          onChange={(e) => setInputValue(e.target.value)} 
+        <TextField
+          label="Add a todo"
+          variant="outlined"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
           fullWidth
         />
-        <Button 
-          variant="contained" 
-          color="primary" 
-          onClick={handleAddTodo} 
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleAddTodo}
           className="add-button"
         >
           Add Todo
@@ -63,23 +136,23 @@ const TodoPage = () => {
           Todos
         </Typography>
         <List>
-          {todos.filter(todo => !todo.completed).map(todo => (
+          {todos.filter(todo => todo.status !== 'completed').map(todo => (
             <ListItem key={todo.id} className="todo-item">
-              <Checkbox 
-                checked={todo.completed} 
-                onChange={() => handleCompleteTodo(todo.id)} 
+              <Checkbox
+                checked={todo.status === 'completed'}
+                onChange={() => handleCompleteTodo(todo.id)}
               />
               {editId === todo.id ? (
                 <div className="edit-container">
-                  <TextField 
-                    variant="outlined" 
-                    value={editValue} 
-                    onChange={(e) => setEditValue(e.target.value)} 
+                  <TextField
+                    variant="outlined"
+                    value={editValue}
+                    onChange={(e) => setEditValue(e.target.value)}
                     fullWidth
                   />
-                  <Button 
-                    variant="contained" 
-                    color="primary" 
+                  <Button
+                    variant="contained"
+                    color="primary"
                     onClick={() => handleSaveEdit(todo.id)}
                   >
                     Save
@@ -87,11 +160,11 @@ const TodoPage = () => {
                 </div>
               ) : (
                 <>
-                  <ListItemText 
-                    primary={todo.text} 
-                    style={{ textDecoration: todo.completed ? 'line-through' : 'none' }}
+                  <ListItemText
+                    primary={todo.title}
+                    style={{ textDecoration: todo.status === 'completed' ? 'line-through' : 'none' }}
                   />
-                  <IconButton onClick={() => handleEditTodo(todo.id, todo.text)}>
+                  <IconButton onClick={() => handleEditTodo(todo.id, todo.title)}>
                     <Edit />
                   </IconButton>
                   <IconButton onClick={() => handleDeleteTodo(todo.id)}>
@@ -108,15 +181,15 @@ const TodoPage = () => {
           Completed
         </Typography>
         <List>
-          {todos.filter(todo => todo.completed).map(todo => (
+          {todos.filter(todo => todo.status === 'completed').map(todo => (
             <ListItem key={todo.id} className="todo-item">
-              <Checkbox 
-                checked={todo.completed} 
-                onChange={() => handleCompleteTodo(todo.id)} 
+              <Checkbox
+                checked={todo.status === 'completed'}
+                onChange={() => handleCompleteTodo(todo.id)}
               />
-              <ListItemText 
-                primary={todo.text} 
-                style={{ textDecoration: todo.completed ? 'line-through' : 'none' }}
+              <ListItemText
+                primary={todo.title}
+                style={{ textDecoration: todo.status === 'completed' ? 'line-through' : 'none' }}
               />
               <IconButton onClick={() => handleDeleteTodo(todo.id)}>
                 <Delete />

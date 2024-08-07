@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import { Button } from '@mui/material';
+import {useNavigate} from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import EditProjectModal from './EditProjectModal'; // Import the modal component
@@ -8,6 +9,7 @@ import EditProjectModal from './EditProjectModal'; // Import the modal component
 const BaseURL = 'http://localhost:8000/';
 
 export default function DataTable({ rows, setRows }) {
+  const navigate = useNavigate()
   const [open, setOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
 
@@ -17,6 +19,8 @@ export default function DataTable({ rows, setRows }) {
   };
 
   const handleClose = () => setOpen(false);
+
+  
 
   const deleteProject = async (id) => {
     const token = localStorage.getItem('access');
@@ -67,7 +71,7 @@ export default function DataTable({ rows, setRows }) {
       headerName: 'Log into Project',
       width: 200,
       renderCell: (params) => (
-        <Button variant="contained" color="success">
+        <Button variant="contained" onClick={()=>navigate(`/todo/${params.row.id}/`)} color="success">
           Log In
         </Button>
       ),
