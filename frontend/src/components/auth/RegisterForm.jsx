@@ -82,6 +82,7 @@ const RegisterForm = () => {
               value={formData.username}
               onChange={handleChange}
               required
+              style={{color:'black'}}
             />
             <input
               type="email"
@@ -90,6 +91,7 @@ const RegisterForm = () => {
               value={formData.email}
               onChange={handleChange}
               required
+              style={{color:'black'}}
             />
             <input
               type="password"
@@ -98,6 +100,7 @@ const RegisterForm = () => {
               value={formData.password}
               onChange={handleChange}
               required
+              style={{color:'black'}}
             />
             <input
               type="password"
@@ -105,13 +108,14 @@ const RegisterForm = () => {
               placeholder="CONFIRM PASSWORD"
               value={formData.confirmPassword}
               onChange={handleChange}
+              style={{color:'black'}}
               required
             />
             <button type="submit" className="opacity">SUBMIT</button>
           </form>
           {error && <p style={{color:'red'}} className="error-message">{error}</p>}
           <div className="register-forget opacity">
-            <a onClick={() => navigate('/login')} style={{ cursor: 'pointer' }}>LOGIN</a>
+            <a onClick={() => navigate('/login')} style={{ cursor: 'pointer', color:'black'}}>LOGIN</a>
           </div>
         </div>
         <div className="circle circle-two"></div>

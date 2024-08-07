@@ -1,0 +1,47 @@
+.todo-container {
+    padding: 20px;
+    /* background-color: #f9f9f9; */
+    /* color: #333333;  */
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 600px; /* Set the maximum width */
+  margin: 0 auto;   /* Center the container */
+  }
+  
+  .input-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    
+    
+  }
+  
+  .add-button {
+    flex-shrink: 0;
+  }
+  
+  .todo-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgb(238,174,202);
+background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
+    color: #333333; 
+    margin-bottom: 10px;
+    border-radius: 5px;
+    padding: 10px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .edit-container {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+  }
+  
+  @media (max-width: 600px) {
+    .input-container {
+      flex-direction: column;
+    }
+  }
+  

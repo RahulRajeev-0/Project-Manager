@@ -1,7 +1,7 @@
 :root {
-  --background: #1a1a2e;
+  --background: #9090af;
   --color: #ffffff;
-  --primary-color: #0f3460;
+  --primary-color: #dce2eb;
 }
 
 * {
@@ -16,8 +16,10 @@ body {
   margin: 0;
   box-sizing: border-box;
   font-family: "poppins";
-  background: var(--background);
-  color: var(--color);
+  background: rgb(238,174,202);
+background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
+  /* background: #b3afaf */
+  /* color: var(--color); */
   letter-spacing: 1px;
   transition: background 0.2s ease;
   -webkit-transition: background 0.2s ease;

@@ -3,6 +3,7 @@ import isAuthUser from './isAuthUser';
 import { Navigate, Outlet } from 'react-router-dom';
 
 
+
 // import {UserContextProvider } from './../context/UserContext'
 
 const PrivateRoutes = () => {
@@ -20,7 +21,7 @@ const PrivateRoutes = () => {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>; // Loading state
+    return <div>Loading...</div> // Loading state
   }
 
   return isAuthenticated ? <Outlet /> : <Navigate to="/login" />;

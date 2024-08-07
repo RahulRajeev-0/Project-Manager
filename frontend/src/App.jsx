@@ -5,6 +5,7 @@ import './App.css'
 import LoginPage from './pages/auth/LoginPage';
 import RegisterPage from './pages/auth/RegisterPage';
 import HomePage from './pages/home/HomePage';
+import TodoPage from './pages/todo/TodoPage';
 
 // alert
 import { ToastContainer} from 'react-toastify';
@@ -26,6 +27,7 @@ function App() {
           <Route element={<PrivateRoute/>} >
 
               <Route path='/' element={<HomePage/>  } />
+              <Route path='/todo' element={<TodoPage/>} />
 
           </Route>
          

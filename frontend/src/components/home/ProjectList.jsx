@@ -85,15 +85,7 @@ export default function DataTable({ rows, setRows }) {
           },
         }}
         pageSizeOptions={[5, 10]}
-        sx={{
-          '& .MuiDataGrid-cell': {
-            color: 'white',
-          },
-          '& .MuiDataGrid-columnHeaderTitle': {},
-          '& .MuiPaginationItem-root': {
-            backgroundColor: 'white',
-          },
-        }}
+        
       />
       {selectedProject && (
         <EditProjectModal

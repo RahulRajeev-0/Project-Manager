@@ -87,7 +87,7 @@ const LoginForm = () => {
           </form>
           {error && <p style={{color:'red'}} className="error-message">{error}</p>}
           <div className="register-forget opacity">
-            <a onClick={() => navigate('/register')} style={{ cursor: 'pointer' }}>REGISTER</a>
+            <a onClick={() => navigate('/register')} style={{ cursor: 'pointer', color:'black'}}>REGISTER</a>
           </div>
         </div>
         <div className="circle circle-two"></div>
