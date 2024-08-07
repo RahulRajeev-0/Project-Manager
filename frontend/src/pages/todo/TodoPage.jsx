@@ -18,6 +18,7 @@ const TodoPage = () => {
   const [editId, setEditId] = useState(null);
   const [editValue, setEditValue] = useState('');
   const token = localStorage.getItem('access');
+  const gitToken = import.meta.env.VITE_API_GIT_TOKEN;
 
   // Fetching todos
   const fetchTodos = async () => {
@@ -151,7 +152,7 @@ const TodoPage = () => {
         },
         {
           headers: {
-            'Authorization': `Bearer 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`, // Replace with your GitHub access token
+            'Authorization': `Bearer ${gitToken}`, // Replace with your GitHub access token
             'Content-Type': 'application/json'
           }
         }
