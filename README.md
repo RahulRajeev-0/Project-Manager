@@ -2,6 +2,9 @@
 
 Project Manager is a web application designed to manage todos efficiently. It allows users to create and manage projects, handle todos within those projects, and export project summaries as gists on GitHub.
 
+## Working Demo
+https://youtu.be/GacdMIS-Tr0
+
 ## Overview
 
 This project is a web application with a Django REST Framework backend and a React frontend using Vite. It provides functionalities for managing and interacting with todos.
